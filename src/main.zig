@@ -9,7 +9,7 @@ pub fn main() !void {
     const args = try std.process.argsAlloc(alc);
     defer std.process.argsFree(alc, args);
 
-    if (args.len < 3) {
+    if (args.len < 4) {
         std.debug.print("Usage: {s} input_file width height\n", .{args[0]});
         std.os.exit(1);
     }
