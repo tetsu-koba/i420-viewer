@@ -11,13 +11,13 @@ pub fn main() !void {
 
     if (args.len < 4) {
         std.debug.print("Usage: {s} input_file width height\n", .{args[0]});
-        std.os.exit(1);
+        std.posix.exit(1);
     }
     const width = try std.fmt.parseInt(u32, args[2], 10);
     const height = try std.fmt.parseInt(u32, args[3], 10);
     var infile = try std.fs.cwd().openFile(args[1], .{});
     defer infile.close();
-    var input_data = try alc.alloc(u8, width * height * 3 / 2);
+    const input_data = try alc.alloc(u8, width * height * 3 / 2);
     defer alc.free(input_data);
 
     if (SDL.SDL_Init(SDL.SDL_INIT_VIDEO) != 0) {
@@ -26,15 +26,15 @@ pub fn main() !void {
     }
     defer SDL.SDL_Quit();
 
-    var window = SDL.SDL_CreateWindow("YUV Player", SDL.SDL_WINDOWPOS_UNDEFINED, SDL.SDL_WINDOWPOS_UNDEFINED, @intCast(width), @intCast(height), SDL.SDL_WINDOW_SHOWN);
+    const window = SDL.SDL_CreateWindow("YUV Player", SDL.SDL_WINDOWPOS_UNDEFINED, SDL.SDL_WINDOWPOS_UNDEFINED, @intCast(width), @intCast(height), SDL.SDL_WINDOW_SHOWN);
     std.debug.assert(window != null);
     defer SDL.SDL_DestroyWindow(window);
 
-    var renderer = SDL.SDL_CreateRenderer(window, -1, SDL.SDL_RENDERER_ACCELERATED);
+    const renderer = SDL.SDL_CreateRenderer(window, -1, SDL.SDL_RENDERER_ACCELERATED);
     std.debug.assert(renderer != null);
     defer SDL.SDL_DestroyRenderer(renderer);
 
-    var texture = SDL.SDL_CreateTexture(renderer, SDL.SDL_PIXELFORMAT_IYUV, SDL.SDL_TEXTUREACCESS_STREAMING, @intCast(width), @intCast(height));
+    const texture = SDL.SDL_CreateTexture(renderer, SDL.SDL_PIXELFORMAT_IYUV, SDL.SDL_TEXTUREACCESS_STREAMING, @intCast(width), @intCast(height));
     std.debug.assert(texture != null);
     defer SDL.SDL_DestroyTexture(texture);
 
